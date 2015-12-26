@@ -167,13 +167,13 @@ if (age > 70) {
 ### En Ruby tout est objet
 
 ```ruby
-"Sponge Bob".class #=> String
-12.class           #=> Fixnum or Integer
-3.14.class         #=> Float
+"Roger".class      #=> String
+13.class           #=> Fixnum or Integer
+3.15.class         #=> Float
 true.class         #=> TrueClass
 false.class        #=> FalseClass
-(1..100).class     #=> Range
-["Sponge Bob", 12, 3.14].class #=> Array
+(1..1000).class    #=> Range
+["Roger", 13, 3.15].class #=> Array
 
 ```
 
@@ -182,8 +182,8 @@ false.class        #=> FalseClass
 ## String
 
 ```ruby
-"hello world".upcase  #=> "HELLO WORLD"
-"Hello" == 'Hello'    #=> true
+"hello world".upcase   #=> "HELLO WORLD"
+"Hello" == 'Hello'     #=> true
 ```
 
 Concatenation
@@ -242,8 +242,8 @@ Conversion en string
 ## Array
 
 ```ruby
-['Sponge Bob', 12, 3.14].size      #=> 3
-['Huey', 'Dewey', 'Louie'].sort    #=> ["Dewey", "Huey", "Louie"]
+['Roger', 12, 3.14].size         #=> 3
+['Huey', 'Dewey', 'Louie'].sort  #=> ["Dewey", "Huey", "Louie"]
 [3, 5, 1].sort  #=> [1, 3, 5]
 ```
 
@@ -262,19 +262,21 @@ Raccourci syntaxique pour un tableau de Strings
 (1...10).to_a      #=> [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 ('a'..'e').to_a    #=> ['a', 'b', 'c', 'd', 'e']
-('A'...'E').to_a    #=> ['A', 'B', 'C', 'D']
+('A'...'E').to_a   #=> ['A', 'B', 'C', 'D']
 ```
 
 --
 
 ## Récap
 
-- String
-- Fixnum (Integer)
-- Float
-- Boolean (true, false)
-- Range
-- Array
+```ruby
+42         # Fixnum
+1.25       # Float
+true       # Boolean
+('a'..'e') # Range
+"hello world"    # String
+[ "a", "e", "i"] # Array
+```
 
 --
 
@@ -282,8 +284,8 @@ Raccourci syntaxique pour un tableau de Strings
 
 Vous avez une tâche basique à accomplir ?
 
-* \- Mélanger un tableau
-* \- Mettre un mot en capital
+* \- Prendre un élément d'un tableau au hasard
+* \- Mettre un mot en capitales
 * \- Séparer un mot en un tableau de caractères
 * \- etc..
 
@@ -293,3 +295,64 @@ Vous avez une tâche basique à accomplir ?
 => http://www.ruby-doc.org/core-2.3.0/
 
 ---
+
+## Types de données avancés
+
+--
+
+### Hash (1)
+
+Equivalent aux objets javascript ou à certains tableaux PHP
+
+```PHP
+// PHP
+$menu = array(
+  "Big Mac" => 5,
+  "Potatoes" => 2
+);
+```
+
+```javascript
+// Javascript
+var menu = {
+  "Big Mac": 5,
+  "Potatoes": 2
+};
+```
+
+```ruby
+# Ruby
+menu = {
+  "Big Mac" => 5,
+  "Potatoes" => 2
+}
+
+menu.class #=> Hash
+menu.keys  #=> ["Big Mac", "Potatoes"]
+```
+
+--
+
+## Hash (2)
+
+Accèder aux valeurs d'un Hash:
+
+```ruby
+# Définition du Hash
+menu = {
+  "Big Mac" => 5,
+  "Potatoes" => 2
+}
+
+# On utilise `my_hash[key]` pour y accéder
+burger_cost = menu["Big Mac"]
+potato_cost = menu["Potatoes"]
+
+puts burger_cost
+#=> 5
+puts potato_cost
+#=> 2
+
+puts "A Big Mac costs #{burger_cost}$ and potatoes are #{potato_cost}$ !"
+#=> A Big Mac costs 5$ and potatoes are 2$ !
+```
