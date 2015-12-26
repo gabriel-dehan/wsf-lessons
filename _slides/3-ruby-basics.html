@@ -152,7 +152,54 @@ if (age > 70) {
 ```
 --
 
-### Remarques
+### Conditions (2)
+
+En Ruby *TOUT EST VRAI* sauf `nil` et `false`
+```ruby
+if 0
+  puts true
+else
+  puts false
+end
+#=> true
+```
+
+```ruby
+if "hello"
+  puts true
+else
+  puts false
+end
+#=> true
+```
+
+```ruby
+if nil
+  puts true
+else
+  puts false
+end
+#=> false
+```
+
+--
+
+## Conditions ternaires
+
+```ruby
+age = 21
+is_adult = age > 18 ? true : false
+is_adult #=> true
+```
+
+```ruby
+# Bit more real-worldish
+user = App.user_logged_in ? User.first : nil
+```
+
+--
+
+### Remarques générales
 
 - Pas de **`;`**
 - Les **`()`** sont facultatives
@@ -298,9 +345,24 @@ Vous avez une tâche basique à accomplir ?
 
 ## Types de données avancés
 
+---
+
+## Hash
+
 --
 
-### Hash (1)
+### Définition
+
+```ruby
+# Ruby
+menu = {
+  "Big Mac" => 5,
+  "Potatoes" => 2
+}
+
+menu.class #=> Hash
+menu.keys  #=> ["Big Mac", "Potatoes"]
+```
 
 Equivalent aux objets javascript ou à certains tableaux PHP
 
@@ -320,30 +382,13 @@ var menu = {
 };
 ```
 
-```ruby
-# Ruby
-menu = {
-  "Big Mac" => 5,
-  "Potatoes" => 2
-}
-
-menu.class #=> Hash
-menu.keys  #=> ["Big Mac", "Potatoes"]
-```
-
 --
 
-## Hash (2)
+### Lecture
 
-Accèder aux valeurs d'un Hash:
+Récupérer une valeur d'un Hash:
 
 ```ruby
-# Définition du Hash
-menu = {
-  "Big Mac" => 5,
-  "Potatoes" => 2
-}
-
 # On utilise `my_hash[key]` pour y accéder
 burger_cost = menu["Big Mac"]
 potato_cost = menu["Potatoes"]
@@ -355,4 +400,122 @@ puts potato_cost
 
 puts "A Big Mac costs #{burger_cost}$ and potatoes are #{potato_cost}$ !"
 #=> A Big Mac costs 5$ and potatoes are 2$ !
+```
+
+--
+
+### Écriture
+
+Ajouter/modifier une valeur d'un Hash:
+
+```ruby
+# On utilise l'opérateur `=`
+menu["Big Mac"] = 10
+menu["Coca"] = 3
+
+p menu #=> { "Big Mac" => 10, "Potatoes" => 2, "Coca" => 3 }
+```
+
+---
+
+## Symbols
+
+--
+
+* \- Un symbole est ~ equivalent à une string sans espace
+* \- Un symbole est unique en mémoire
+* \- Les symboles sont utilisés en tant qu'identifiants
+
+```ruby
+a = "name" #=> String 'name'
+b = "name" #=> Different String 'name'
+
+c = :name #=> Symbol :name
+d = :name #=> Same Symbol :name
+```
+
+--
+
+### Quel intérêt ?
+
+* \- Économiser de la mémoire
+* \- Utilisés comme clef de Hash (plus agréable à utiliser)
+
+```ruby
+user = {
+  :name => "George",
+  :age  => 25,
+  :country => "France",
+  :gender  => "Male"
+  :social_security_number => 13498234823842
+}
+
+puts user[:name] #=> "George"
+puts user[:age]  #=> 25
+```
+
+--
+
+### Quel intérêt ? (2)
+
+Permet une syntaxe de Hash simplifiée
+
+```ruby
+user = {
+  :name => "George",
+  :age  => 25
+}
+
+puts user[:name] #=> "George"
+```
+
+Peut aussi s'écrire
+
+```ruby
+user = {
+  name: "George",
+  age:  25
+}
+
+# Automatiquement transformé en
+p user #=> { :name => "George", :age => 25 }
+
+puts user[:name] #=> "George"
+```
+
+--
+
+### Note sur les hashs
+
+On peut mélanger des clefs symbols et strings:
+
+```ruby
+user = {
+  name: "George",
+  :age => 25,
+  "social security number" => 15324234234
+}
+```
+Mais ce mélange est à éviter car peu lisible.
+
+---
+
+## Expressions régulières (Regexp)
+
+--
+
+Ruby comme tout langage permet l'utilisation d'expressions régulières :
+
+```ruby
+# Vérifier qu'une string correspond à une regexp
+phone_regexp = /(\+33|0)\d{9}/
+"0678024353" =~ /\d{11}/ #=> nil
+"0678024353" =~ phone_regexp #=> 0
+```
+
+```ruby
+# Récupérer les matchs d'une regexp
+match = "George Abitbol".match /(\w*)\s(\w*)/
+match[1] #=> George
+match[2] #=> Abitbol
 ```

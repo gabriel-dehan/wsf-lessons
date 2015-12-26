@@ -1,0 +1,237 @@
+---
+title: Ruby advanced
+reveal:
+  theme: solarized
+  slideNumber: true
+  progress: true
+  mouseWheel: true
+  transition: linear
+---
+
+# Ruby avancé
+
+---
+
+## Methods
+
+L'équivalent de fonctions en PHP ou Javascript.
+
+```ruby
+def method_name(arguments, ...)
+  # do something
+  # return something
+end
+```
+
+```ruby
+def say_hello
+  puts "hello world"
+end
+
+say_hello() #=> "hello world"
+```
+```ruby
+def full_name(first_name, last_name)
+  name = first_name.capitalize + " " + last_name.capitalize
+  return name
+end
+
+puts full_name("George", "Abitbol") #=> "George Abitbol"
+```
+
+--
+
+### Les parenthèses sont facultatives
+
+```ruby
+def say_hello
+  puts "hello world"
+end
+
+say_hello() #=> "hello world"
+say_hello   #=> "hello world"
+```
+```ruby
+def login email, password
+  user = User.find_by_email(email)
+
+  if user && user.password == password
+    return user
+  else
+    return nil
+  end
+end
+
+login("george@gmail.com", "password") #=> nil
+login "george@gmail.com", "password"  #=> nil
+```
+
+--
+
+### Le mot clef return est facultatif
+
+```ruby
+def login email, password
+  user = User.find_by_email(email)
+
+  if user && user.password == password
+    user # pas besoin de return
+  else
+    nil  # pas besoin de return
+  end
+end
+
+login "george@gmail.com", "password"
+#=> nil
+login("george@gmail.com", "password")
+#=> nil
+```
+Ruby renvoie toujours la dernière expression évaluée.
+
+--
+
+### Conventions sur les noms de méthode
+
+Une méthode avec un **"?"** renvoie toujours `true` ou `false`
+```ruby
+42.even? #=> true
+42.odd?  #=> false
+```
+
+Une méthode avec un **"!"** modifie directement ses arguments
+
+```ruby
+text = 'Some text'
+
+text.upcase   #=> "SOME TEXT"
+text          #=> "Some text"
+
+text.upcase!  #=> "SOME TEXT"
+text          #=> "SOME TEXT"
+```
+
+---
+
+## Iterators
+
+Comment parcourir un Hash ou un Array ?
+
+--
+
+### For
+
+```ruby
+list = ["George", "Roger", "Mathieu"]
+
+for name in list
+  puts "Hello #{name}"
+end
+#=> Hello George
+#=> Hello Roger
+#=> Hello Mathieu
+```
+
+```ruby
+user = { email: "george@gmail.com", age: 25, gender: "Male" }
+
+for key, value in user
+  puts "#{key.to_s.capitalize}'s value is #{value}"
+end
+#=> Email's value is george@gmail.com
+#=> Age's value is 25
+#=> Gender's value is Male
+```
+
+--
+
+### Each
+La bonne façon de faire (orientée objet)
+```ruby
+list = ["George", "Roger", "Mathieu"]
+
+list.each do |name|
+  puts "Hello #{name}"
+end
+```
+```ruby
+user = { email: "george@gmail.com", age: 25, gender: "Male" }
+
+user.each do |key, value|
+  puts "#{key.to_s.capitalize}'s value is #{value}"
+end
+```
+
+--
+
+### Comprendre each
+
+* \- `#each` est une méthode
+* \- Elle prend en argument un `block` équivalent à une fonction anonyme en JS
+
+```javascript
+// Javascript
+[1,2,3].forEach(function(number) {
+  console.log(number);
+});
+// 1, 2, 3
+```
+
+```ruby
+# Ruby
+[1,2,3].each do |number| # <-- argument de la "fonction anonyme" (block)
+  puts number
+end
+#=> 1, 2, 3
+```
+
+* \- Les mots clefs `do` et `end` délimitent un block.
+* \- Vous pouvez imaginer un block comme un bout de code encapsulé
+
+--
+
+### Syntaxe alternative
+
+* \- On peut utiliser `{...}` à la place de `do...end`
+* \- La convention veut qu'on utilise `{...}` pour les blocks sur une seule ligne et `do...end` pour les blocks multi-lignes.
+
+```ruby
+[1,2,3].each { |number|  puts number }
+```
+```ruby
+[1,2,3].each do |number|
+  number_times_5 = number * 5
+  puts number_times_5
+end
+```
+
+--
+
+### Times, Map, Select...
+
+Il existe de nombreux autres itérateurs, en voici quelques un:
+
+```ruby
+# #times exécute un block de code un certain nombre de fois
+5.times { print "Hello " } #=> Hello Hello Hello Hello Hello
+```
+
+```ruby
+# #map applique un block de code à chaque élément d'un tableau/hash
+list = ["George", "Roger", "Mathieu"]
+
+new_list = list.map { |name| name.upcase }
+#=> ["GEORGE", "ROGER", "MATHIEU"]
+```
+
+```ruby
+# #select filtre un tableau/hash via une condition
+list = ["George", "Roger", "Mathieu", "Robert"]
+
+filtered_list = list.select { |name| name.chars.first = "R" }
+#=> ["Roger", "Robert"]
+```
+
+Et d'autres encore :
+
+* \- http://www.ruby-doc.org/core-2.2.0/Array.html
+* \- http://www.ruby-doc.org/core-2.2.0/Enumerable.html
