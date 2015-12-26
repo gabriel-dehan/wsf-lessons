@@ -1,0 +1,96 @@
+---
+title: Install Ruby
+order: 1
+reveal:
+  theme: solarized
+  slideNumber: true
+  progress: true
+  mouseWheel: true
+  transition: linear
+---
+
+# Installer Ruby & Rails
+
+---
+
+## Ruby
+
+--
+
+### Windows
+
+Télécharger et installer [Ruby Installer - Ruby 2.2.x](http://rubyinstaller.org/)
+
+Lancer la console windows (`cmd`)
+
+```bash
+$ ruby -v
+ruby 2.2.x
+```
+--
+
+### Mac
+
+Ouvrir un terminal en entrer
+
+```bash
+$ curl https://raw.githubusercontent.com/fesplugas/rbenv-installer/master/bin/rbenv-installer | bash
+$ rbenv install 2.3.0
+$ rbenv global 2.3.0
+
+$ ruby -v
+ruby 2.3.0p
+```
+L'installation de Ruby peut prendre jusqu'à 10-15 minutes donc pas de panique.
+
+--
+
+### Linux
+
+Ouvrir un terminal et entrer
+
+```bash
+$ curl https://raw.githubusercontent.com/fesplugas/rbenv-installer/master/bin/rbenv-installer | bash
+$ sudo apt-get install build-essential tklib zlib1g-dev libssl-dev libssl-dev libffi-dev libxml2 libxml2-dev libxslt1-dev
+$ sudo apt-get clean
+$ rbenv install 2.3.0
+$ rbenv global 2.3.0
+
+$ ruby -v
+ruby 2.3.0p
+```
+
+L'installation de Ruby peut prendre jusqu'à 10-15 minutes donc pas de panique.
+
+---
+
+## Rails
+
+Dans votre terminal ou `cmd`
+```bash
+$ gem install rails bundler pry rspec colored
+```
+
+---
+
+## Exécuter du code
+
+--
+
+## IRB - Le bac à sable
+
+* \- **I**nteractive **R**u**B**y
+* \- ```$ irb``` pour lancer un interpréteur Ruby
+* \- **IRB** est votre terrain de jeu. Si vous avez un doute ou que vous voulez essayer quelque chose **lancez IRB et testez !**
+
+{% img 'irb.png' alt:'IRB' class:'irb' %}
+
+--
+
+## Exécuter un fichier
+
+```bash
+$ ruby chemin/vers/votre/fichier.rb
+```
+
+{% img 'runcode.png' alt:'Run code example' class:'run-code' %}

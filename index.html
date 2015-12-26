@@ -1,0 +1,19 @@
+---
+layout: default
+title: WSF - Ruby On Rails
+---
+
+<div id="home">
+  <h1>WSF Classes
+    <br>
+    <small>Ruby On Rails</small>
+  </h1>
+  <ol>
+    {% for slide in site.slides %}
+    <li>
+      <a class="slide-entry" href="{{ slide.url }}">{{ slide.title }}</a>
+      <small>{{ slide.description }}</small>
+    </li>
+    {% endfor %}
+  </ol>
+</div>

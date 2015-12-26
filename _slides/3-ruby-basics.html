@@ -1,0 +1,295 @@
+---
+title: Ruby Basics
+reveal:
+  theme: solarized
+  slideNumber: true
+  progress: true
+  mouseWheel: true
+  transition: linear
+---
+
+# Les bases de Ruby
+
+---
+
+## Syntaxe
+
+--
+
+### Variables
+
+* Pas de mot clef ou de signe (`$`) spécifique
+* Une variable peut contenir n'importe quel type de donnée
+* Les noms de variables sont en `snake_case`
+
+```
+# Ruby
+age = 8
+first_name = "Jean"
+last_name = 'Neige'
+
+// PHP
+$age = 8;
+$first_name = "Jean";
+$last_name = 'Neige';
+
+// Javascript
+var age = 8;
+var firstName = "Jean";
+var lastName = 'Neige';
+```
+
+--
+
+### Boucles - While
+
+```ruby
+# Ruby
+i = 0;
+while i < 10 do
+  print i
+  i += 1
+end
+# => 0123456789
+```
+
+```php
+// PHP
+$i = 0;
+while ($i < 10) {
+  echo $i;
+  $i++;
+}
+// => 0123456789
+```
+--
+
+### Boucles - Until
+
+L'inverse d'un `while`
+
+- `while` == tant que la condition est vraie
+- `until` == jusqu'à ce que la condition soit vraie
+
+```ruby
+# Ruby
+i = 0;
+until i >= 10 do # Jusqu'à ce que i soit supérieur ou égal à 10
+  print i
+  i += 1
+end
+# => 0123456789
+```
+
+--
+
+### Boucles - Do...While
+
+Exécute les instructions *au moins une fois*
+```ruby
+# Ruby
+i = 0
+begin
+  print i
+end while i > 0
+# 0
+```
+
+```PHP
+// PHP
+$i = 0;
+do {
+  echo $i;
+} while ($i > 0);
+// 0
+```
+
+--
+
+### Boucles - For
+```ruby
+# Ruby
+for i in 0..9
+  print i
+end
+# => 0123456789
+```
+
+```PHP
+// PHP
+for ($i = 0; $i < 10; $i++) {
+  echo $i;
+}
+// => 0123456789
+```
+
+--
+
+### Conditions
+
+Attention en Ruby **`else if`** n'existe pas ! On utilise **`elsif`**
+
+```ruby
+# Ruby
+if age > 70
+  puts "You are old !"
+elsif age > 18
+  puts "You are a grown up !"
+else
+  puts "Hey kiddo !"
+end
+```
+
+```php
+// PHP
+if (age > 70) {
+  puts "You are old !"
+} else if age > 18 {
+  puts "You are a grown up !"
+} else {
+  puts "Hey kiddo !"
+}
+```
+--
+
+### Remarques
+
+- Pas de **`;`**
+- Les **`()`** sont facultatives
+- Pas de **`{}`** mais des **`do`** et **`end`** ou des retours à la ligne
+
+---
+
+## Types de données basiques
+
+--
+
+### En Ruby tout est objet
+
+```ruby
+"Sponge Bob".class #=> String
+12.class           #=> Fixnum or Integer
+3.14.class         #=> Float
+true.class         #=> TrueClass
+false.class        #=> FalseClass
+(1..100).class     #=> Range
+["Sponge Bob", 12, 3.14].class #=> Array
+
+```
+
+--
+
+## String
+
+```ruby
+"hello world".upcase  #=> "HELLO WORLD"
+"Hello" == 'Hello'    #=> true
+```
+
+Concatenation
+
+```
+num = 1 + 2
+"three: " + num.to_s   #=> "three: 3"
+'three: ' + num.to_s   #=> 'three: 3'
+```
+
+Interpolation
+
+```ruby
+"two: #{1 + 1}"    #=> "two: 2"
+'two: #{1 + 1}'    #=> "two: #{1 + 1}"
+```
+
+Conversion en entier
+
+```ruby
+'1984'.class        #=> String
+'1984'.to_i         #=> 1984
+'1984'.to_i.class   #=> Fixnum
+
+```
+
+--
+
+## Fixnum (Integer)
+
+```ruby
+# Standard arithmetic
+1 + 2      #=> 3
+2 * 4      #=> 8
+# Built-in methods
+20.even?   #=> true
+20.odd?    #=> false
+```
+
+Conversion en string
+
+```ruby
+1984.to_s    #=> "1984"
+```
+
+--
+
+## Float
+
+```
+3.1416.truncate   #=> 3
+```
+
+--
+
+## Array
+
+```ruby
+['Sponge Bob', 12, 3.14].size      #=> 3
+['Huey', 'Dewey', 'Louie'].sort    #=> ["Dewey", "Huey", "Louie"]
+[3, 5, 1].sort  #=> [1, 3, 5]
+```
+
+Raccourci syntaxique pour un tableau de Strings
+
+```ruby
+%w(Huey Dewey Louie)  #=> ["Huey", "Dewey", "Louie"]
+```
+
+--
+
+## Range
+
+```ruby
+(1..10).to_a       #=> [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+(1...10).to_a      #=> [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+('a'..'e').to_a    #=> ['a', 'b', 'c', 'd', 'e']
+('A'...'E').to_a    #=> ['A', 'B', 'C', 'D']
+```
+
+--
+
+## Récap
+
+- String
+- Fixnum (Integer)
+- Float
+- Boolean (true, false)
+- Range
+- Array
+
+--
+
+## La doc de Ruby est votre amie !
+
+Vous avez une tâche basique à accomplir ?
+
+* \- Mélanger un tableau
+* \- Mettre un mot en capital
+* \- Séparer un mot en un tableau de caractères
+* \- etc..
+
+<br>
+**Par pitié, consultez la documentation**
+
+=> http://www.ruby-doc.org/core-2.3.0/
+
+---

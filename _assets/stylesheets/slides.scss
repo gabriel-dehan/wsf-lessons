@@ -1,0 +1,46 @@
+h2, h3 {
+    margin: 0 0 35px 0 !important;
+}
+
+ul, li {
+    list-style: none;
+}
+
+li {
+    padding-bottom: 6px !important;
+}
+
+.logo {
+    &.ks {
+        height: 150px !important;
+        width: auto !important;
+        margin-right: 20px;
+    }
+}
+
+.reveal {
+    img, section img {
+        border: none;
+        box-shadow: none;
+    }
+
+    .left {
+        display: block;
+        position: relative;
+        width: 90%;
+        margin: 15px auto;
+        text-align: left;
+    }
+
+    .space {
+        padding-top: 15px;
+    }
+
+    p code, li code {
+        padding: 2px 9px;
+        margin: 0 5px;
+        background: #3F3F3F;
+        color: #DCDCDC;
+    }
+
+}
