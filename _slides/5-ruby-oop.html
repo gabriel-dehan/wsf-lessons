@@ -1,0 +1,297 @@
+---
+title: Ruby Orienté Objet
+reveal:
+  theme: solarized
+  slideNumber: true
+  progress: true
+  mouseWheel: true
+  transition: linear
+---
+
+# Ruby Orienté Objet
+
+---
+
+## Classes
+
+--
+
+### Les classes de base (built-in)
+
+```ruby
+"Roger".class      #=> String
+13.class           #=> Fixnum or Integer
+3.15.class         #=> Float
+true.class         #=> TrueClass
+false.class        #=> FalseClass
+(1..1000).class    #=> Range
+["Roger", 13, 3.15].class       #=> Array
+{ nom: "Roger", age: 30 }.class #=> Hash
+```
+
+La plupart de ces syntaxes sont des raccourcis:
+```ruby
+Array.new("Roger", 13, 3.15) == ["Roger", 13, 3.15]
+String.new("Roger") == "Roger"
+```
+
+--
+
+### Définir une classe
+
+```ruby
+# Ruby
+class User
+
+  def initialize(attributes)
+    # Do something
+  end
+end
+```
+
+```php
+// PHP
+class User {
+
+  public function __construct($attributes) {
+    // Do something
+  }
+}
+```
+
+--
+
+### Variables d'instances
+
+On utilise `@` suivi du nom de la variable.
+```ruby
+# Ruby
+class User
+
+  def initialize(attributes)
+    @first_name  = attributes[:first_name]
+    @last_name   = attributes[:last_name]
+    @age   = attributes[:age]
+    @admin = false
+  end
+end
+```
+
+```php
+// PHP
+class User {
+  private $first_name;
+  private $last_name;
+  private $age;
+  private $admin;
+
+  public function __construct($attributes) {
+    $this->first_name  = $attributes["first_name"];
+    $this->last_name   = $attributes["last_name"];
+    $this->age   = $attributes["age"];
+    $this->admin = false;
+  }
+}
+```
+
+--
+
+### Créer une nouvelle instance
+
+```ruby
+# Ruby
+class User
+
+  def initialize(attributes)
+    @first_name  = attributes[:first_name]
+    @last_name   = attributes[:last_name]
+    @age   = attributes[:age]
+    @admin = false
+  end
+end
+
+user = User.new({ first_name: "Gabriel", last_name: "Dehan", age: 24 })
+p user
+#=> #<User:0x007f84b72a5d30 @first_name="Gabriel", @last_name="Dehan", @age=24, @admin=false>
+```
+
+--
+
+### Getters
+
+```ruby
+# Ruby
+class User
+
+  def initialize(attributes)
+    @first_name  = attributes[:first_name]
+    @last_name   = attributes[:last_name]
+    @age   = attributes[:age]
+    @admin = false
+  end
+
+  def first_name
+    @first_name
+  end
+end
+```
+
+```php
+// PHP
+class User {
+  private $first_name;
+  private $last_name;
+  private $age;
+  private $admin;
+
+  public function __construct($attributes) {
+    $this->first_name  = $attributes["first_name"];
+    $this->last_name   = $attributes["last_name"];
+    $this->age   = $attributes["age"];
+    $this->admin = false;
+  }
+
+  public function getFirstName() {
+    return $this->first_name;
+  }
+}
+```
+
+--
+
+### Setters
+
+```ruby
+# Ruby
+class User
+
+  def initialize(attributes)
+    @first_name  = attributes[:first_name]
+    @last_name   = attributes[:last_name]
+    @age   = attributes[:age]
+    @admin = false
+  end
+
+  def first_name=(value)
+    @first_name = value
+  end
+end
+```
+
+```php
+// PHP
+class User {
+  private $first_name;
+  private $last_name;
+  private $age;
+  private $admin;
+
+  public function __construct($attributes) {
+    $this->first_name  = $attributes["first_name"];
+    $this->last_name   = $attributes["last_name"];
+    $this->age   = $attributes["age"];
+    $this->admin = false;
+  }
+
+  public function setFirstName(value) {
+    $this->first_name = value;
+  }
+}
+```
+
+--
+
+### Accessors (Getters ET Setters)
+
+```ruby
+# Ruby
+class User
+
+  def initialize(attributes)
+    @first_name  = attributes[:first_name]
+    @last_name   = attributes[:last_name]
+    @age   = attributes[:age]
+    @admin = false
+  end
+
+  def first_name
+    @first_name = value
+  end
+
+  def first_name=(value)
+    @first_name = value
+  end
+
+  # Et pareil pour chaque attribut ...
+end
+```
+--
+
+### Syntaxe simplifiée
+
+```ruby
+# Ruby
+class User
+  attr_reader :first_name
+  attr_writer :first_name
+  # ou bien attr_accessor :first_name
+
+  def initialize(attributes)
+    @first_name  = attributes[:first_name]
+    @last_name   = attributes[:last_name]
+    @age   = attributes[:age]
+    @admin = false
+  end
+end
+```
+
+--
+
+### Méthodes d'instance
+
+```ruby
+# Ruby
+class User
+  attr_reader :admin
+  attr_accessor :first_name, :last_name, :age
+
+  def initialize(attributes)
+    @first_name  = attributes[:first_name]
+    @last_name   = attributes[:last_name]
+    @age   = attributes[:age]
+    @admin = false
+  end
+
+  def full_name
+    "#{@first_name} #{@last_name}"
+  end
+```
+
+```ruby
+  def is_adult?
+    @age >= 18
+  end
+
+  private
+  def set_admin(value)
+    @admin = value
+  end
+end
+```
+---
+
+## Héritage
+
+```ruby
+# Ruby
+class Admin < User # la classe Admin hérite de la classe User
+  # ...
+end
+```
+
+```php
+// PHP
+class Admin extends User { // la classe Admin hérite de la classe User
+  // ...
+}
+```

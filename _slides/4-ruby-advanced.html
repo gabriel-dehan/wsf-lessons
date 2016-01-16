@@ -235,3 +235,118 @@ Et d'autres encore :
 
 * \- http://www.ruby-doc.org/core-2.2.0/Array.html
 * \- http://www.ruby-doc.org/core-2.2.0/Enumerable.html
+
+---
+
+## Organiser son code
+
+--
+
+```ruby
+# my_project/html_utils.rb
+
+def sanitize(html_string)
+  # ...
+end
+
+def to_safe_buffer(html_string)
+  # ...
+end
+```
+
+```ruby
+# my_project/app.rb
+
+# ...
+sanitize(request.body)
+#...
+```
+
+Commment lier ces deux fichiers ?
+
+--
+
+## require / require_relative
+
+### require
+
+```ruby
+# my_project/app.rb
+require 'my_project/html_utils.rb'
+
+# ...
+sanitize(request.body)
+#...
+
+```
+
+### require_relative
+
+```ruby
+# my_project/app.rb
+require_relative './html_utils.rb'
+
+# ...
+sanitize(request.body)
+#...
+
+```
+
+--
+
+### Différences
+
+* \- `require` cherche le fichier à partir de l'emplacement où le script a été lancé via `$ ruby path/to/file.rb`.
+<br /><br />
+* \- `require_relative` cherche le fichier à partir du dossier où se trouve le fichier courant.
+
+
+---
+
+## Gems
+
+Les gems sont des packages créés par la communauté, fournissant un ensemble de classes/méthodes.
+
+--
+
+### Trouver une Gem
+
+* \- https://www.ruby-toolbox.com/
+* \- https://rubygems.org/
+* \- Google ;)
+
+--
+
+### Installer une Gem
+
+```bash
+$ gem install gem_name
+```
+
+Exemple:
+
+```bash
+$ gem install colorize
+```
+
+--
+
+### Utiliser une Gem
+
+* \- Lisez le readme sur Github/dans la documentation
+<br />
+De façon générale:
+
+```ruby
+# my_app.rb
+
+require 'colorize' # require 'gem_name'
+
+# Ensuite on peut l'utiliser
+colors = String.colors.map { |color| color.to_s.colorize(color) }
+puts colors.join(', ')
+puts "----------------"
+puts "Please, my eyes.".green.on_red.blink
+```
+
+{% img 'example.png' alt:'Example' class:'example' %}
