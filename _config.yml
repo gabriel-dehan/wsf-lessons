@@ -9,6 +9,8 @@ collections:
   slides:
     output: true
 
+exclude: ['config.ru', 'Gemfile', 'Gemfile.lock', 'vendor']
+
 defaults:
   -
     scope:
