@@ -1,0 +1,409 @@
+---
+title: Ruby Orienté Objet
+reveal:
+  theme: solarized
+  slideNumber: true
+  progress: true
+  mouseWheel: true
+  transition: linear
+---
+
+# Ruby Orienté Objet
+
+---
+
+## Classes
+
+--
+
+### Les classes de base (built-in)
+
+```ruby
+"Roger".class      #=> String
+13.class           #=> Fixnum or Integer
+3.15.class         #=> Float
+true.class         #=> TrueClass
+false.class        #=> FalseClass
+(1..1000).class    #=> Range
+["Roger", 13, 3.15].class       #=> Array
+{ nom: "Roger", age: 30 }.class #=> Hash
+```
+
+La plupart de ces syntaxes sont des raccourcis:
+```ruby
+Array.new("Roger", 13, 3.15) == ["Roger", 13, 3.15]
+String.new("Roger") == "Roger"
+```
+
+--
+
+### Définir une classe
+
+```ruby
+# Ruby
+class User
+
+  def initialize(attributes)
+    # Do something
+  end
+end
+```
+
+```php
+// PHP
+class User {
+
+  public function __construct($attributes) {
+    // Do something
+  }
+}
+```
+
+--
+
+### Variables d'instances
+
+On utilise `@` suivi du nom de la variable.
+```ruby
+# Ruby
+class User
+
+  def initialize(attributes)
+    @first_name  = attributes[:first_name]
+    @last_name   = attributes[:last_name]
+    @age   = attributes[:age]
+    @admin = false
+  end
+end
+```
+
+```php
+// PHP
+class User {
+  private $first_name;
+  private $last_name;
+  private $age;
+  private $admin;
+
+  public function __construct($attributes) {
+    $this->first_name  = $attributes["first_name"];
+    $this->last_name   = $attributes["last_name"];
+    $this->age   = $attributes["age"];
+    $this->admin = false;
+  }
+}
+```
+
+--
+
+### Créer une nouvelle instance
+
+`MaClass.new` appelle la méthode `initialize` et crée une nouvelle instance de la classe.
+```ruby
+# Ruby
+class User
+
+  def initialize(attributes)
+    @first_name  = attributes[:first_name]
+    @last_name   = attributes[:last_name]
+    @age   = attributes[:age]
+    @admin = false
+  end
+end
+
+user = User.new({ first_name: "Gabriel", last_name: "Dehan", age: 24 })
+p user
+#=> #<User:0x007f84b72a5d30 @first_name="Gabriel", @last_name="Dehan", @age=24, @admin=false>
+```
+```php
+// PHP
+$user = new User(array( "first_name" => "Gabriel", "last_name" => "Dehan", "age" => 24));
+```
+
+--
+
+### Getters
+
+```ruby
+# Ruby
+class User
+
+  def initialize(attributes)
+    @first_name  = attributes[:first_name]
+    # ...
+  end
+
+  def first_name
+    @first_name
+  end
+end
+```
+
+```php
+// PHP
+class User {
+  private $first_name;
+  // ...
+
+  public function __construct($attributes) {
+    $this->first_name  = $attributes["first_name"];
+    # ...
+  }
+
+  public function getFirstName() {
+    return $this->first_name;
+  }
+}
+```
+
+--
+
+### Setters
+
+```ruby
+# Ruby
+class User
+
+  def initialize(attributes)
+    @first_name  = attributes[:first_name]
+    # ...
+  end
+
+  def first_name=(value)
+    @first_name = value
+  end
+end
+```
+
+```php
+// PHP
+class User {
+  private $first_name;
+  // ...
+
+  public function __construct($attributes) {
+    $this->first_name  = $attributes["first_name"];
+    // ...
+  }
+
+  public function setFirstName(value) {
+    $this->first_name = value;
+  }
+}
+```
+
+--
+
+### Accessors (Getters ET Setters)
+
+```ruby
+# Ruby
+class User
+
+  def initialize(attributes)
+    @first_name  = attributes[:first_name]
+    @last_name   = attributes[:last_name]
+    @age   = attributes[:age]
+    @admin = false
+  end
+
+  def first_name
+    @first_name = value
+  end
+
+  def first_name=(value)
+    @first_name = value
+  end
+
+  # Et pareil pour chaque attribut ...
+end
+```
+--
+
+### Syntaxe simplifiée
+
+```ruby
+# Ruby
+class User
+  attr_reader :first_name
+  attr_writer :first_name
+  # ou bien attr_accessor :first_name
+
+  def initialize(attributes)
+    @first_name  = attributes[:first_name]
+    @last_name   = attributes[:last_name]
+    @age   = attributes[:age]
+    @admin = false
+  end
+end
+```
+
+--
+
+### Méthodes d'instance
+
+```ruby
+# Ruby
+class User
+  attr_reader :admin
+  attr_accessor :first_name, :last_name, :age
+
+  def initialize(attributes)
+    @first_name  = attributes[:first_name]
+    @last_name   = attributes[:last_name]
+    @age   = attributes[:age]
+    @admin = false
+  end
+
+  def full_name
+    "#{@first_name} #{@last_name}"
+  end
+```
+
+```ruby
+  def is_adult?
+    @age >= 18
+  end
+
+  private
+  def set_admin(value)
+    @admin = value
+  end
+end
+```
+
+--
+
+### Méthodes de classe
+
+Aussi appelées méthodes statiques, on utilise le mot clef `self` pour les définir.
+
+```ruby
+class User
+  attr_reader :admin
+  attr_accessor :first_name, :last_name, :age
+
+  def initialize(attributes)
+    @first_name  = attributes[:first_name]
+    @last_name   = attributes[:last_name]
+    @age   = attributes[:age]
+    @admin = false
+  end
+
+  def self.create_fake()
+    f_names = ["Roger", "Bernard", "Noémie", "Ginette"]
+    l_names = ["Dupond", "Derosger", "Maupas", "Meillote"]
+    new({ first_name: f_names.sample, last_name: l_names.sample, age: (16..65).to_a.sample })
+  end
+end
+```
+```ruby
+User.create_fake
+#=> #<User:0x007f84b72a5d30 @first_name="Roger", @last_name="Maupas", @age=43, @admin=false>
+```
+---
+
+## Héritage
+
+--
+
+```ruby
+# Ruby
+class Admin < User # la classe Admin hérite de la classe User
+  # ...
+end
+```
+
+```php
+// PHP
+class Admin extends User { // la classe Admin hérite de la classe User
+  // ...
+}
+```
+
+--
+
+## Super
+
+Le mot clef `super` permet d'appeler la méthode ayant le même nom dans la classe parente.
+
+```ruby
+class User
+  attr_reader :admin
+  attr_accessor :first_name, :last_name, :age
+
+  def initialize(attributes)
+    @first_name  = attributes[:first_name]
+    @last_name   = attributes[:last_name]
+    @age   = attributes[:age]
+    @admin = false
+  end
+end
+```
+
+```ruby
+class Admin < User
+  def initialize(attributes)
+    super(attributes) # méthode initialize de la classe `User`
+    @admin = true
+  end
+end
+admin = Admin.new({ first_name: "Gabriel", last_name: "Dehan", age: 24 })
+#=> #<Admin:0x007f82c92a5d43 first_name: "Gabriel", ..., @admin=true>
+
+```
+
+---
+
+## Modules
+
+Un module ou *namespace* permet de mieux organiser son code et d'éviter les conflits.
+
+--
+
+### Définition
+
+* \- On utilise le mot clef `module` pour définir un module
+* \- On accède à une classe du module via `NomDuModule::NomDeLaClasse`
+
+```ruby
+module Model
+  class User
+    # ...
+  end
+
+  class Post
+    # ...
+  end
+end
+
+module Controllers
+  class User
+  end
+
+  class Post
+  end
+end
+```
+```ruby
+# Model::User, Model::Post, Controllers::User, Controllers::Post
+user = Model::User.new({ first_name: "Gabriel", ...})
+user_controller = Controllers::User.new({ model: user, view: ... })
+```
+
+--
+
+### Exemples du monde réel
+
+```ruby
+# La gem Nokogiri permet de parser du HTML ou du XML
+Nokogiri::HTML("...")
+Nokogiri::XML("...")
+```
+
+```ruby
+# En Rails ActiveRecord nous permet de gérer nos modèles
+ActiveRecord::Base # Module de base d'active record
+ActiveRecord::Serialization # Module permettant de parser/restaurant de la donnée JSON
+ActiveRecord::Translation # Module permettant de traduire les attributes d'un modèle
+```
