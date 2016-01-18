@@ -34,7 +34,7 @@ Essayez de séparer votre code en méthodes, par exemple une méthode pour deman
 
 ## Screenshots
 
-Votre application ressemblera globalement à ça (vous l'afficher différement si vous voulez)
+Votre application ressemblera globalement à ça (vous pouvez l'afficher différement si vous le souhaitez)
 
 {% img 'soundcloud-dl3.png' alt:'Example' class:'soundcloud-dl' %}
 
