@@ -6,6 +6,8 @@ gems:
   - jekyll-assets
 
 collections:
+  exercices:
+    output: true
   slides:
     output: true
 

@@ -16,4 +16,13 @@ title: WSF - Ruby On Rails
     </li>
     {% endfor %}
   </ol>
+
+  <h2>Exercices</h2>
+  <ol>
+    {% for exercice in site.exercices %}
+    <li>
+      <a chass="exercice-entry" href="{{ exercice.url }}">{{ exercice.title }}</a>
+    </li>
+    {% endfor %}
+  </ol>
 </div>
