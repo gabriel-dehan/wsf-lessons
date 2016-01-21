@@ -44,9 +44,9 @@ Pour ceux qui ont fini, améliorez la méthode `tag` en faisant en sorte que l'o
 
 ```ruby
 tag('div', { class: "container", id: "wow" }) do
-  tag('a', { href="#add" } ) do
+  tag('a', { href: "#add" } ) do
     tag('span', { class: "icon icon-add" }) do
-      Ajouter
+      "Ajouter"
     end
   end
 end
@@ -101,7 +101,9 @@ def tag(tag_name, attributes, &block)
 
   # On appelle le block, qui dans l'exemple du dessous
   # nous retourne "Bonjour" ou "Au revoir"
-  content = block.call()
+  if block != nil # Si on a un block
+    content = block.call()
+  end
 
   # return something
 end
