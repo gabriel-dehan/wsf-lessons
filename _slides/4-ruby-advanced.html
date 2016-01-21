@@ -235,3 +235,127 @@ Et d'autres encore :
 
 * \- http://www.ruby-doc.org/core-2.2.0/Array.html
 * \- http://www.ruby-doc.org/core-2.2.0/Enumerable.html
+
+
+---
+
+## Organiser son code
+
+  On peut choisir d'écrire tout son code dans un seul fichier mais ce n'est que rarement une bonne idée ;)
+
+--
+
+### REQUIRE
+
+`require` permet de charger un autre fichier/library
+
+```ruby
+# /home/user/code/helpers.rb
+
+def display_prompt
+  puts "Entrez quelque-chose"
+  print "> "
+end
+```
+
+```ruby
+# /home/user/code/interface.rb
+require "helpers"
+
+def ask_user_something
+  display_prompt
+  user_input = gets
+end
+
+ask_user_something()
+```
+
+```bash
+$ cd /home/user/code
+$ ruby interface.rb
+Entrez quelque-chose
+>
+```
+
+--
+
+### REQUIRE_RELATIVE
+
+Pareil que `require` mais se base sur l'emplacement du fichier actuel.
+
+```ruby
+# /home/user/code/helpers.rb
+
+def display_prompt
+  puts "Entrez quelque-chose"
+  print "> "
+end
+```
+
+```ruby
+# /home/user/code/interface.rb
+
+# require par rapport à l'emplacement du fichier `interface.rb`
+require_relative "./helpers"
+
+def ask_user_something
+  display_prompt
+  user_input = gets
+end
+
+ask_user_something()
+```
+
+---
+
+## GEMS
+
+Ruby possède un outil permettant d'installer et travailler facilement avec des bibliothèques externes (libraries): les gems.
+
+--
+
+### Trouver une Gem
+
+- [https://rubygems.org/](https://rubygems.org/)
+- [https://www.ruby-toolbox.com/](https://www.ruby-toolbox.com/)
+- Google/Github
+
+--
+
+### Installer une Gem
+
+```bash
+gem install nom_de_la_gem
+```
+
+Prenons l'exemple de [colorize](https://github.com/fazibear/colorize)
+
+```bash
+$ gem install colorize
+```
+
+--
+
+### Utiliser une Gem
+
+```ruby
+# mon_fichier.rb
+require 'nom_de_la_gem'
+```
+
+Donc pour colorize:
+
+```ruby
+# colors.rb
+require 'colorize'
+
+colors = String.colors.map do |color_name|
+  color_name.to_s.colorize(color_name)
+end
+
+puts colors.join(", ")
+puts "--------------"
+puts "Please my eyes".green.on_red
+```
+
+{% img 'example.png' alt:'Example gem' class:'example-gem' %}
