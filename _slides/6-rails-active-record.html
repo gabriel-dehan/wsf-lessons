@@ -1,0 +1,291 @@
+---
+title: Rails - Active Record
+reveal:
+  theme: solarized
+  slideNumber: true
+  progress: true
+  mouseWheel: true
+  transition: linear
+---
+
+# Active Record
+
+---
+
+## Active Record ?
+
+Active Record est probablement le design pattern d'ORM (Mapping objet-relationnel) le plus utilisé.
+Il consiste à créer un équivalent en code des tables de la base de donnée.
+
+Par exemple, pour une table
+
+```
+[artists]
+- id
+- full_name
+- email
+- url
+```
+
+Le modèle correspondant serait quelque chose comme ça:
+
+```ruby
+class Artist
+  attr_accessor :id, :full_name, :email, :url
+
+  def initialize(id, full_name, email, url
+    @id = id
+    @full_name = full_name
+    @email = email
+    @url = url
+  end
+
+  # ...
+end
+```
+
+Chaque colonne de la base de donnée correspond à un attribut de notre classe (une variable d'instance et des accesseurs) et le nom de notre classe est le singulier de du nom de notre table.
+
+---
+
+## Active Record dans Rails
+
+Rails possède une librairie implémentant ce pattern active record. Il s'agit du module `ActiveRecord` qui va permettre de connecter nos modèles à la base de données.
+
+--
+
+### Syntaxe
+
+```ruby
+class User < ActiveRecord::Base
+end
+```
+
+--
+
+### Utilisation
+
+```ruby
+User.all #=> retourne tout les users
+User.find(4) #=> retourne le user avec l'id 4
+User.where(name: "George") #=> retourne les users ayant pour nom george
+
+# Crée un nouvel utilisateur et l'enregistre en base
+user = User.create({ name: "George", age: 25 })
+
+# On update l'utilisateur
+user.age = 26
+user.save
+
+# Ou
+user.update_attributes({ age: 26 })
+
+user.destroy
+
+User.destroy_all #=> oops
+```
+
+---
+
+## Migrations
+
+La puissance d'ActiveRecord réside aussi dans son système de migration, permettant de créer le schéma de notre base de donnée et de le modifier aisément.
+
+--
+
+### Schema
+
+Schéma d'une table artiste
+
+```
+[artists]
+- id (INT) PRIMARY
+- full_name (VARCHAR)
+- email (VARCHAR)
+- url (TEXT)
+```
+
+Schema d'une table tracks
+
+```
+[tracks]
+- id (INT) PRIMARY
+- artist_id (INT)
+- title (VARCHAR)
+- url (TEXT)
+```
+
+--
+
+### Migration
+
+Une migration est une fichier qui indique une modification à apporter au schéma de la base de donnée.
+Par exemple:
+
+* \- Une migration pour créer la table `artists`
+* \- Une migration pour créer la table `tracks`
+* \- Une migration pour rajouter un champ `length` à la table `tracks`
+* \- Une migration pour retirer le champ `url` de la table `artists`
+* \- ...
+
+--
+
+### Exemple de migration
+
+```ruby
+# create_artists.rb
+class CreateArtists < ActiveRecord::Migration
+  def change
+    create_table(:artists) do |t|
+      # id automatique pas besoin de le spécifier
+
+      t.string :full_name, null: false
+      t.string :email, null: false
+      t.string :url
+
+      t.timestamps # ajoute automatiquement `created_at` et `updated_at`
+    end
+  end
+end
+```
+
+--
+
+### Exemple de migration (2)
+
+```ruby
+# add_length_to_tracks.rb
+class AddLengthToTracks < ActiveRecord::Migration
+  def change
+    # add_column :table_name, :column_name, :type, ...
+    add_column :tracks, :length, :integer, null: false
+  end
+end
+
+# remove_url_from_artists.rb
+class RemoveUrlFromArtists < ActiveRecord::Migration
+  def change
+    # remove_column :table_name, :column_name
+    remove_column :artists, :url
+  end
+end
+```
+
+---
+
+## Créer des migrations
+
+--
+
+### Ligne de commande
+
+```
+$ rails generate migration NomDeMigration colonne1:type colonne2:type ...
+```
+
+Exemples:
+
+```
+$ rails generate migration CreateArtists full_name:string email:string url:string
+# Crée un nouveau fichier de migration dans le dossier db/migrate
+$ rails generate migration AddLengthtotracks
+# Crée un nouveau fichier de migration dans le dossier db/migrate
+```
+
+--
+
+### Lancer les migrations
+
+Afin d'executer les fichiers de migration et de créer notre schéma pour de bon, on utilise l'outil `rake`.
+```
+# Execute la migration
+$ rake db:migrate
+```
+
+Lorsque la migration est lancée, rake va executer tout les nouveaux fichiers depuis la migration précédente.
+
+ActiveRecord garde en mémoire toutes les migrations précédentes et vous permet de revenir en arrière si vous avez fait une erreur.
+
+```
+# Revient en arriere
+$ rake db:rollback
+```
+
+---
+
+## Relations
+
+--
+
+### has many
+
+```ruby
+# models/artist.rb
+class Artist < ActiveRecord::Base
+  # Crée la méthode .tracks
+  has_many :tracks
+end
+
+# models/track.rb
+class Track < ActiveRecord::Base
+  # Crée la méthode .artist
+  belongs_to :artist
+end
+```
+
+--
+
+### has one
+
+```ruby
+class Artist < ActiveRecord::Base
+  has_one :producer
+end
+```
+
+--
+
+### has many through
+
+```ruby
+class Artist < ActiveRecord::Base
+  # On imagine une table album contenant l'artist_id
+  has_many :albums
+  has_many :tracks, through: :albums
+end
+```
+
+```ruby
+class Album < ActiveRecord::Base
+  belongs_to :artist
+  has_many :tracks
+end
+```
+
+```ruby
+class Track < ActiveRecord::Base
+  belongs_to :album
+
+  def artist
+    album.artist
+  end
+end
+```
+
+--
+
+### Utilisation
+
+```ruby
+artist = Artist.find(4)
+
+# Récupère toutes les tracks de l'artist
+tracks = artist.tracks
+tracks.each do |track|
+  puts track.title, track.length
+end
+
+
+track = Track.find(2)
+# Récupère l'artiste associé à une track
+track.artist.full_name

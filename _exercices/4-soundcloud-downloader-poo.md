@@ -24,7 +24,7 @@ Nous aurons les modèles suivants:
 class Artist
   # ...
 
-  def initialize(has_of_data_from_the_api)
+  def initialize(hash_of_data_from_the_api)
     @id = data["id"]
     @full_name = data["full_name"]
     # ...
