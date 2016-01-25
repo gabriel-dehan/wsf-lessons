@@ -20,10 +20,10 @@ L'id√©e est maintenant de construire une Web app en se basant sur la version pr√
 
 ## Modus operandi
 
-1 - Ecrire models et migrations
-2 - Ecrire les routes
-3 - Choisir une route
-4 - Creer le controleur si il n'existe pas
-5 - Coder l'action
-6 - Coder la view
-7 - Retourner a l'etape 3
+- 1 - Ecrire models et migrations
+- 2 - Ecrire les routes
+- 3 - Choisir une route
+- 4 - Creer le controleur si il n'existe pas
+- 5 - Coder l'action
+- 6 - Coder la view
+- 7 - Retourner a l'etape 3
