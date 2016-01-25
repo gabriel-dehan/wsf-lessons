@@ -108,7 +108,7 @@ require 'soundcloud'
 
 # Ici on utilise une constante (en majuscule) car les constantes sont globales
 # ce qui nous permettra d'appeler notre variable CLIENT depuis n'importe quelle méthode
-CLIENT = SoundClound.new({
+CLIENT = SoundCloud.new({
   client_id: "VOTRE_CLIENT_ID",
   client_secret: "VOTRE_CLIENT_SECRET"
 })
@@ -173,7 +173,7 @@ $ gem install awesome_print
 require 'awesome_print'
 require 'soundcloud'
 
-CLIENT = SoundClound.new({
+CLIENT = SoundCloud.new({
   client_id: "VOTRE_CLIENT_ID",
   client_secret: "VOTRE_CLIENT_SECRET"
 })
@@ -199,7 +199,7 @@ Et dans votre fichier .rb
 require "soundcloud"
 require "soundcloud-downloader"
 
-CLIENT = SoundClound.new({
+CLIENT = SoundCloud.new({
   client_id: "VOTRE_CLIENT_ID",
   client_secret: "VOTRE_CLIENT_SECRET"
 })
