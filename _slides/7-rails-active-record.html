@@ -21,15 +21,18 @@ Il consiste à créer un équivalent en code des tables de la base de donnée.
 
 ### Exemple
 
+* \- Chaque colonne de la base de donnée correspond à un attribut de notre classe;
+* \- Le nom de notre classe est le singulier de du nom de notre table.
+
 ```
+# Table
+
 [artists]
 - id
 - full_name
 - email
 - url
 ```
-
-Le modèle correspondant serait quelque chose comme ça:
 
 ```ruby
 class Artist
@@ -46,13 +49,13 @@ class Artist
 end
 ```
 
-Chaque colonne de la base de donnée correspond à un attribut de notre classe (une variable d'instance et des accesseurs) et le nom de notre classe est le singulier de du nom de notre table.
-
 ---
 
 ## Active Record dans Rails
 
-Rails possède une librairie implémentant ce pattern active record. Il s'agit du module `ActiveRecord` qui va permettre de connecter nos modèles à la base de données.
+Rails possède une librairie implémentant ce pattern active record.
+
+Il s'agit du module `ActiveRecord` qui va permettre de connecter nos modèles à la base de données.
 
 --
 
@@ -86,6 +89,8 @@ user.destroy
 
 User.destroy_all #=> oops
 ```
+
+[Le guide d'active record](http://guides.rubyonrails.org/active_record_querying.html)
 
 ---
 
@@ -291,3 +296,4 @@ end
 track = Track.find(2)
 # Récupère l'artiste associé à une track
 track.artist.full_name
+```
