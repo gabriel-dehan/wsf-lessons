@@ -1,0 +1,474 @@
+---
+title: Rails - RVC
+reveal:
+  theme: solarized
+  slideNumber: true
+  progress: true
+  mouseWheel: true
+  transition: linear
+---
+
+# Rails RVC
+
+Routes - Views - Controllers
+
+---
+
+## Routes
+
+Pour qu'une requête appelle la bonne action du bon controller nous avons besoin d'une route.
+Le router est le lien entre le navigateur du client et vos controllers.
+
+Il vit dans le fichier `config/routes.rb`
+
+--
+
+## routes.rb
+
+Exemple de fichier de routes
+```ruby
+Rails.application.routes.draw do
+  root to: 'pages#home'
+
+  post '/subscribe',        to: 'subscriptions#create'
+
+  resources :posts, only: [:index, :show] do
+    resources :comments, only: [:show]
+  end
+end
+```
+
+--
+
+## Définir une nouvelle route
+
+--
+
+### GET
+
+- Pour une requête **GET** permettant de récupérer la liste des restaurants
+
+```ruby
+# type '/route/que/vous/voulez', to: "controller#action"
+get '/restaurants, to: "restaurants#index"
+```
+
+--
+
+### GET (2)
+
+- Pour une requête **GET** permettant de récupérer un restaurant
+
+```ruby
+# type '/route/que/vous/voulez', to: "controller#action"
+# Ici `:id` représente un paramètre d'URL qui sera récupéré dans l'action de controller.
+# Par exemple /restaurants/1 transmettra le paramètre id = 1 à l'action show.
+get '/restaurants/:id', to: "restaurants#show"
+```
+
+--
+
+### POST
+
+- Pour une requête **POST** pour créer un nouveau restaurant
+
+```ruby
+# type '/route/que/vous/voulez', to: "controller#action"
+post '/restaurants, to: "restaurants#create"
+```
+
+--
+
+### PATCH
+- Pour une requête **PATCH** pour d'updater un restaurant
+
+```ruby
+# type '/route/que/vous/voulez', to: "controller#action"
+# Ici on passe le paramètre id à l'action update qui ira updater le restaurant avec l'id 1
+patch '/restaurants/:id', to: "restaurants#update"
+```
+
+--
+
+## Resources
+
+La méthode `resources` permet de créer toutes les routes CRUD pour un model donné
+
+```ruby
+resources :restaurants
+```
+
+Est équivalent à écrire les routes suivantes:
+
+```ruby
+# CREATE
+get    "/restaurants/new" => "restaurants#new"     # page affichant le form
+post   "/restaurants"     => "restaurants#create"  # action qui traite le form
+# READ
+get    "/restaurants"     => "restaurants#index"
+get    "/restaurants/:id" => "restaurants#show"
+# UPDATE
+get    "/restaurants/:id/edit" => "restaurants#edit"   # page affichant le form
+put    "/restaurants/:id"      => "restaurants#update" # action qui traite le form
+# DELETE
+delete "/restaurants/:id"      => "restaurants#destroy"
+```
+
+--
+
+### Resources nestées
+
+Les méthodes `resources` peuvent être imbriqués par l'intermédiaire d'un block.
+
+```ruby
+resources :posts do
+  resources :comments
+end
+```
+
+Va créer toutes les routes CRUD de `posts` ET des routes dites nestées pour `comments`.
+```ruby
+# CREATE
+get    "/posts/:id/comments/new" => "comments#new"
+post   "/posts/:id/comments"     => "comments#create"
+# READ
+get    "/posts/:id/comments"     => "comments#index"
+get    "/posts/:id/comments/:comment_id" => "comments#show"
+# UPDATE
+get    "/posts/:id/comments/:comment_id/edit" => "comments#edit"
+put    "/posts/:id/comments"     => "comments#update"
+# DELETE
+delete "/posts/:id/comments/:comment_id" => "comments#destroy"
+
+```
+
+---
+
+## Controllers
+
+* \- Les controllers sont des classes qui contiennent des méthodes d'instance (actions du controller).
+* \- Ces actions sont appelées par le router lorsque l'URL correspondante à été demandée.
+* \- Lorsqu'une action est appelée, les paramètres d'URL lui sont passés ainsi que les paramètres POST (formulaires, etc...)
+
+--
+
+## Définir un controller
+
+Si le controller correspond à un model, son nom est le nom du model au pluriel + `Controller`.
+
+```ruby
+# app/controllers/restaurants_controller.rb
+class RestaurantsController < ApplicationController
+  # action index
+  def index
+    # Récupère les infos à partir des models
+    # Appelle la view HTML pour afficher tout les restaurants en lui passant les données nécessaires
+  end
+
+  # action show
+  def show
+    # Récupère l'id du restaurant à afficher depuis les paramètres d'URL
+    # Récupère les infos à partir du model
+    # Appelle la view HTML pour afficher le restaurant en lui passant les données nécessaires
+  end
+end
+```
+
+--
+
+## Paramètres de requête
+
+--
+
+Le hash `params` est disponible dans toutes les actions d'un controller.
+
+Pour une requête donnée, il contient:
+- Les données inscrites dans l'URL (via le routeur)
+- Les query parameters (`http://monsite.com/restaurants?limit=10`)
+- Les paramètres POST (souvent passés via un formulaire)
+
+--
+
+### Paramètres d'URL
+
+- Lorsque nous avons un URL du type:
+
+```
+get '/restaurants/:id', to: "restaurants#show"
+```
+
+La partie `:id` sera remplacée par l'id d'un `Restaurant`.
+
+- Donc si nous allons à l'URL `/restaurants/1` nous voulons voir s'afficher le premier `Restaurant`.
+
+- Pour se faire il nous faut donc "extraire" ce `1` de l'URL.
+
+--
+
+```ruby
+class RestaurantsController < ApplicationController
+  def show
+    # Récupère l'id du restaurant à afficher depuis les paramètres d'URL
+    id = params[:id]
+
+    # Récupère les infos à partir du model
+    restaurant = Restaurant.find(id)
+
+    # Appelle la view HTML pour afficher le restaurant en lui passant les données nécessaires
+    ...
+  end
+end
+```
+
+--
+
+### GET - Query params
+
+Avec l'URL `/restaurants?limit=10`:
+
+```ruby
+class RestaurantsController < ApplicationController
+  def index
+    limit = params[:limit]
+    @restaurant = Restaurant.all.limit(limit)
+
+    # Appelle la view HTML pour afficher le restaurant en lui passant les données nécessaires
+    ...
+  end
+end
+```
+
+--
+
+### POST - Form params
+
+Imaginons que l'utilisateur a rempli et soumis le formulaire.
+On passe donc dans l'action `create`
+
+```ruby
+class RestaurantsController < ApplicationController
+  def create
+    # On récupère les params du formulaire
+    restaurant_params = params[:restaurant]
+
+    name    = restaurant_params[:name]
+    address = restaurant_params[:address]
+    rating  = restaurant_params[:rating]
+
+    Restaurant.create({ name: name, address: address, rating: rating })
+
+    # Retour à la liste des restaurants
+    redirect_to restaurants_path
+  end
+end
+```
+
+---
+
+## Les Views
+
+--
+
+### Appeler une view
+
+Une view est toujours appelée depuis une action de controller.
+
+```ruby
+class RestaurantsController < ApplicationController
+  def index
+    @restaurant = Restaurant.all
+
+    # Cette ligne appelle le fichier `app/views/restaurants/index.html.erb`
+    render :index
+  end
+end
+```
+
+--
+
+### Rappel
+
+Le fichier de view est toujours dans
+
+```
+app/views/nom_du_controller/nom_action.html.erb
+```
+
+Exemple, pour l'action `restaurants#show`
+```
+app/views/restaurants/show.html.erb
+```
+
+--
+
+### Rails swag
+
+Le `render :nomdemaview` est facultatif.
+
+```ruby
+class RestaurantsController < ApplicationController
+  def index
+    @restaurant = Restaurant.all
+
+    # /!\ Facultatif /!\
+    # render :index
+  end
+end
+```
+
+--
+
+## Passer des données à la view
+
+Pour passer des données à la view, il suffit de créer une variable d'instance.
+
+```ruby
+class RestaurantsController < ApplicationController
+  def index
+    # restaurants n'est pas transmis à la view
+    restaurants = Restaurants.all
+
+    # @restaurant est transmis à la view
+    @restaurant = Restaurant.all
+  end
+end
+```
+
+--
+
+## ERB
+
+Les views de Ruby sont (par défaut) écrites en ERB (**E**mbedded **R**u**B**y).
+
+--
+
+## index.html.erb
+
+```ruby
+<% if @restaurants.any? %>
+  <ul>
+  <% @restaurants.each do |restaurant| %>
+    <li>
+      <span class="restaurant-name">
+        <%= restaurant.name %>
+        <!-- <%= %> veut dire que la valeur de retour du Ruby
+             exécuté est affichée -->
+      </span>
+      <span class="restaurant-rating">
+        <%= restaurant.rating %>/10
+      </span>
+    </li>
+  <% end %>
+  </ul>
+```
+```ruby
+<% else %>
+  <p>
+    Aucun restaurant n'existe.
+  </p>
+<% end %>
+```
+
+---
+
+# Composer une view
+
+--
+
+## ERB Basics
+
+* \- `<% %>` exécute du code Ruby mais n'affiche pas la valeur de retour.
+
+```ruby
+<% count = @restaurants.count %>
+
+<% @restaurants.each do |restaurant| %>
+  # ...
+<% end %>
+```
+
+* \- `<%= %>` exécute du code Ruby et affiche la valeur de retour dans le HTML.
+* \- À peu près équivalent à `echo` en PHP.
+
+```ruby
+<%= count %>
+
+<%= restaurant.name
+```
+
+--
+
+## Helpers
+
+Les helpers sont des méthodes accessibles dans les views.
+
+Elles permettent de générer du HTML.
+
+--
+
+### Forms Helpers
+
+#### Nouveau restaurant
+
+```ruby
+# `app/views/restaurants/new.html.erb`
+<%= form_for Restaurant.new do |form| %>
+  <fieldset>
+    <%= form.text_field :name %>
+    <%= form.text_field :address %>
+    <%= form.number_field :rating %>
+  </fieldset>
+
+  <%= form.submit %>
+<% end %>
+```
+
+#### Editer un restaurant
+
+```ruby
+# `app/views/restaurants/edit.html.erb`
+# @restaurant est un restaurant récupéré depuis la BDD
+<%= form_for @restaurant do |form| %>
+  <fieldset>
+    <%= form.text_field :name %>
+    <%= form.text_field :address %>
+    <%= form.number_field :rating %>
+  </fieldset>
+
+  <%= form.submit %>
+<% end %>
+```
+
+[Le guide des forms](http://guides.rubyonrails.org/form_helpers.html)
+
+--
+
+### Helpers de navigation
+
+Chaque route dans rails possède un alias, que l'on peut voir en faisant `rake routes`.
+Cet alias peut être utilisé pour créer des liens vers ces routes.
+
+```ruby
+<%= link_to 'Home page', root_path %>
+# <a href="/">Home page</a>
+```
+
+```ruby
+<%= link_to 'Voir la liste des restaurants', restaurants_path
+# <a href="/restaurants">Voir la liste des retaurants</a>
+```
+
+```ruby
+# Ici, le restaurant_path prend en argument l'id du restaurant afin de composer l'URL
+# par exemple /restaurants/1 ou /restaurants/2
+<%= link_to 'Voir ce restaurant', restaurant_path(@restaurant_id)
+# <a href="/restaurants/1">Voir ce restaurant</a>
+```
+
+--
+
+### Autres helpers
+
+```ruby
+<%= img 'logo.png', alt: 'Logo' %>
+```
