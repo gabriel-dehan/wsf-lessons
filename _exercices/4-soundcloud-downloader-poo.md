@@ -108,8 +108,8 @@ class Client
   attr_reader :client_id
 
   def initialize
-    @client_id = "52c68972691d7085a0b7f83935a49750"
-    @client_secret = "a68668f96f3c529f76f31ca37cc59f7f"
+    @client_id = "..."
+    @client_secret = "..."
 
     @client = SoundCloud.new({ client_id: @client_id, client_secret: @client_secret })
   end
